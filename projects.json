@@ -4,7 +4,19 @@
     "name": "Example App",
     "description": "An example PWA project to get you started.",
     "url": "https://yourusername.github.io/example-app",
-    "tags": ["demo", "starter"],
+    "tags": [
+      "demo",
+      "starter"
+    ],
     "color": "#7c3aed"
+  },
+  {
+    "id": "2",
+    "name": "Price History",
+    "url": "https://k666wind.github.io/price-history/",
+    "description": "",
+    "tags": [
+      "Shopping"
+    ]
   }
 ]
