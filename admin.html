@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PWA Hub — Admin</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0f0a1e" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0f0a1e;
+      --orb1: #3d1a78; --orb2: #0d3d6e;
+      --glass: rgba(255,255,255,0.06);
+      --glass-border: rgba(255,255,255,0.12);
+      --glass-hover: rgba(255,255,255,0.09);
+      --text: #f0eeff;
+      --text-dim: rgba(240,238,255,0.55);
+      --text-dimmer: rgba(240,238,255,0.3);
+      --accent: #a78bfa;
+      --danger: rgba(239,68,68,0.7);
+      --danger-bg: rgba(239,68,68,0.1);
+      --input-bg: rgba(255,255,255,0.05);
+      --input-border: rgba(255,255,255,0.14);
+      --input-focus: rgba(167,139,250,0.5);
+    }
+    html, body { min-height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; }
+
+    .bg-orbs { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.45; animation: drift 20s ease-in-out infinite alternate; }
+    .orb1 { width: 500px; height: 500px; background: var(--orb1); top: -150px; left: -100px; }
+    .orb2 { width: 400px; height: 400px; background: var(--orb2); bottom: -100px; right: -80px; animation-delay: -8s; }
+    @keyframes drift { 0% { transform: translate(0,0); } 100% { transform: translate(30px, 25px); } }
+
+    .page { position: relative; z-index: 1; max-width: 820px; margin: 0 auto; padding: 2.5rem 2rem 5rem; }
+
+    .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2.5rem; }
+    .logo { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800;
+      background: linear-gradient(135deg, #e0d7ff, #a78bfa 50%, #60a5fa);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .back-link { display: flex; align-items: center; gap: 6px; color: var(--text-dim); font-size: 0.85rem;
+      text-decoration: none; padding: 6px 14px; border: 1px solid var(--glass-border);
+      border-radius: 999px; background: var(--glass); backdrop-filter: blur(10px); transition: all 0.2s; }
+    .back-link:hover { background: var(--glass-hover); color: var(--text); }
+    .back-link svg { width: 14px; height: 14px; }
+
+    h2 { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 1.25rem; }
+
+    /* section panels */
+    .panel {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 1.75rem;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      margin-bottom: 1.5rem;
+    }
+
+    /* form */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-field { display: flex; flex-direction: column; gap: 6px; }
+    .form-field.full { grid-column: 1 / -1; }
+    label { font-size: 0.8rem; color: var(--text-dim); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+    input, textarea {
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      width: 100%;
+    }
+    input::placeholder, textarea::placeholder { color: var(--text-dimmer); }
+    input:focus, textarea:focus { border-color: var(--input-focus); background: rgba(255,255,255,0.07); }
+    textarea { resize: vertical; min-height: 72px; }
+
+    .hint { font-size: 0.75rem; color: var(--text-dimmer); margin-top: 2px; }
+
+    .btn-row { display: flex; gap: 10px; margin-top: 1.25rem; flex-wrap: wrap; }
+    .btn {
+      padding: 10px 22px; border-radius: 10px; border: none; cursor: pointer;
+      font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 500;
+      transition: all 0.18s; display: flex; align-items: center; gap: 6px;
+    }
+    .btn-primary { background: rgba(167,139,250,0.25); color: var(--accent); border: 1px solid rgba(167,139,250,0.35); }
+    .btn-primary:hover { background: rgba(167,139,250,0.35); }
+    .btn-ghost { background: var(--glass); color: var(--text-dim); border: 1px solid var(--glass-border); }
+    .btn-ghost:hover { background: var(--glass-hover); color: var(--text); }
+    .btn svg { width: 15px; height: 15px; }
+
+    /* project list */
+    .proj-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .proj-item {
+      display: flex; align-items: center; gap: 1rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px; padding: 1rem 1.25rem;
+      transition: background 0.18s;
+    }
+    .proj-item:hover { background: rgba(255,255,255,0.07); }
+    .proj-info { flex: 1; min-width: 0; }
+    .proj-name { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; }
+    .proj-url { font-size: 0.78rem; color: var(--text-dimmer); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .proj-tags { display: flex; gap: 5px; margin-top: 4px; flex-wrap: wrap; }
+    .tag { font-size: 0.7rem; padding: 2px 8px; border-radius: 999px; background: rgba(167,139,250,0.12); color: #c4b5fd; border: 1px solid rgba(167,139,250,0.18); }
+    .proj-actions { display: flex; gap: 6px; flex-shrink: 0; }
+    .icon-btn { background: none; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 6px; cursor: pointer; color: var(--text-dim); transition: all 0.18s; display: flex; }
+    .icon-btn:hover { background: rgba(255,255,255,0.08); color: var(--text); }
+    .icon-btn.del:hover { background: var(--danger-bg); border-color: rgba(239,68,68,0.3); color: #fca5a5; }
+    .icon-btn svg { width: 15px; height: 15px; }
+
+    .empty-state { text-align: center; padding: 2rem; color: var(--text-dimmer); font-size: 0.85rem; }
+
+    /* export */
+    .export-block {
+      position: relative;
+    }
+    .json-preview {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 1rem;
+      font-family: 'DM Mono', 'Fira Code', monospace;
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      max-height: 200px;
+      overflow-y: auto;
+      white-space: pre;
+      margin-bottom: 1rem;
+    }
+
+    /* step guide */
+    .steps { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.5rem; }
+    .step { display: flex; align-items: flex-start; gap: 10px; font-size: 0.85rem; color: var(--text-dim); }
+    .step-num { width: 22px; height: 22px; border-radius: 50%; background: rgba(167,139,250,0.2); color: var(--accent); font-size: 0.72rem; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+
+    /* toast */
+    .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(80px);
+      background: rgba(167,139,250,0.15); backdrop-filter: blur(12px);
+      border: 1px solid rgba(167,139,250,0.3); color: var(--text); font-size: 0.85rem;
+      padding: 10px 20px; border-radius: 999px;
+      transition: transform 0.3s cubic-bezier(.34,1.56,.64,1), opacity 0.3s;
+      opacity: 0; pointer-events: none; z-index: 100; }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+    @media (max-width: 600px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .page { padding: 1.5rem 1rem 4rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-orbs"><div class="orb orb1"></div><div class="orb orb2"></div></div>
+
+  <div class="page">
+    <div class="topbar">
+      <div class="logo">⬡ Hub Admin</div>
+      <a href="index.html" class="back-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back to Hub
+      </a>
+    </div>
+
+    <!-- Add project form -->
+    <div class="panel">
+      <h2 id="form-title">Add Project</h2>
+      <div class="form-grid">
+        <div class="form-field">
+          <label>Project Name *</label>
+          <input type="text" id="f-name" placeholder="My Awesome App" />
+        </div>
+        <div class="form-field">
+          <label>URL *</label>
+          <input type="url" id="f-url" placeholder="https://yourusername.github.io/my-app" />
+        </div>
+        <div class="form-field full">
+          <label>Description</label>
+          <textarea id="f-desc" placeholder="What does this project do?"></textarea>
+        </div>
+        <div class="form-field full">
+          <label>Tags</label>
+          <input type="text" id="f-tags" placeholder="tool, productivity, game  (comma separated)" />
+          <span class="hint">Separate multiple tags with commas</span>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="btn-save">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          <span id="save-label">Add Project</span>
+        </button>
+        <button class="btn btn-ghost" id="btn-cancel" style="display:none">
+          Cancel Edit
+        </button>
+      </div>
+    </div>
+
+    <!-- Project list -->
+    <div class="panel">
+      <h2>Projects <span id="proj-count" style="font-size:1rem; color:var(--text-dim); font-family:'DM Sans',sans-serif; font-weight:400;"></span></h2>
+      <div class="proj-list" id="proj-list">
+        <div class="empty-state">Loading…</div>
+      </div>
+    </div>
+
+    <!-- Export -->
+    <div class="panel">
+      <h2>Export &amp; Deploy</h2>
+      <div class="export-block">
+        <div class="json-preview" id="json-preview"></div>
+        <div class="btn-row">
+          <button class="btn btn-primary" id="btn-copy">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy JSON
+          </button>
+          <button class="btn btn-ghost" id="btn-download">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download projects.json
+          </button>
+        </div>
+      </div>
+
+      <div style="margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid rgba(255,255,255,0.08);">
+        <p style="font-size:0.82rem; color:var(--text-dim); margin-bottom: 0.75rem;">Deploy steps:</p>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><span>Click <strong style="color:var(--text)">Copy JSON</strong> or Download above</span></div>
+          <div class="step"><div class="step-num">2</div><span>Replace the content of <code style="background:rgba(255,255,255,0.08);padding:1px 6px;border-radius:4px;font-size:0.8rem">projects.json</code> in your GitHub repo</span></div>
+          <div class="step"><div class="step-num">3</div><span>Commit &amp; push — GitHub Pages will update automatically</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    let projects = [];
+    let editingId = null;
+    let nextId = 1;
+
+    async function load() {
+      try {
+        const res = await fetch('projects.json?t=' + Date.now());
+        projects = await res.json();
+        if (projects.length) {
+          nextId = Math.max(...projects.map(p => parseInt(p.id) || 0)) + 1;
+        }
+      } catch {
+        projects = [];
+      }
+      render();
+    }
+
+    function render() {
+      const list = document.getElementById('proj-list');
+      const count = document.getElementById('proj-count');
+      count.textContent = `(${projects.length})`;
+      updateJsonPreview();
+
+      if (!projects.length) {
+        list.innerHTML = '<div class="empty-state">No projects yet. Add your first one above!</div>';
+        return;
+      }
+
+      list.innerHTML = '';
+      projects.forEach(p => {
+        const tagsHtml = (p.tags||[]).map(t => `<span class="tag">${esc(t)}</span>`).join('');
+        const div = document.createElement('div');
+        div.className = 'proj-item';
+        div.innerHTML = `
+          <div class="proj-info">
+            <div class="proj-name">${esc(p.name)}</div>
+            <div class="proj-url">${esc(p.url||'')}</div>
+            ${tagsHtml ? `<div class="proj-tags">${tagsHtml}</div>` : ''}
+          </div>
+          <div class="proj-actions">
+            <button class="icon-btn" title="Edit" onclick="startEdit('${p.id}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </button>
+            <button class="icon-btn del" title="Delete" onclick="deleteProj('${p.id}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+            </button>
+          </div>`;
+        list.appendChild(div);
+      });
+    }
+
+    function updateJsonPreview() {
+      document.getElementById('json-preview').textContent = JSON.stringify(projects, null, 2);
+    }
+
+    document.getElementById('btn-save').addEventListener('click', () => {
+      const name = document.getElementById('f-name').value.trim();
+      const url  = document.getElementById('f-url').value.trim();
+      const desc = document.getElementById('f-desc').value.trim();
+      const tagsRaw = document.getElementById('f-tags').value.trim();
+      const tags = tagsRaw ? tagsRaw.split(',').map(t => t.trim()).filter(Boolean) : [];
+
+      if (!name) { showToast('⚠️ Project name is required'); return; }
+      if (!url)  { showToast('⚠️ URL is required'); return; }
+
+      if (editingId) {
+        const idx = projects.findIndex(p => p.id === editingId);
+        if (idx >= 0) projects[idx] = { ...projects[idx], name, url, description: desc, tags };
+        cancelEdit();
+        showToast('✅ Project updated!');
+      } else {
+        projects.push({ id: String(nextId++), name, url, description: desc, tags });
+        clearForm();
+        showToast('✅ Project added!');
+      }
+      render();
+    });
+
+    document.getElementById('btn-cancel').addEventListener('click', cancelEdit);
+
+    function startEdit(id) {
+      const p = projects.find(x => x.id === id);
+      if (!p) return;
+      editingId = id;
+      document.getElementById('f-name').value = p.name || '';
+      document.getElementById('f-url').value  = p.url  || '';
+      document.getElementById('f-desc').value = p.description || '';
+      document.getElementById('f-tags').value = (p.tags||[]).join(', ');
+      document.getElementById('form-title').textContent = 'Edit Project';
+      document.getElementById('save-label').textContent  = 'Save Changes';
+      document.getElementById('btn-cancel').style.display = '';
+      document.getElementById('f-name').focus();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function cancelEdit() {
+      editingId = null;
+      clearForm();
+      document.getElementById('form-title').textContent = 'Add Project';
+      document.getElementById('save-label').textContent  = 'Add Project';
+      document.getElementById('btn-cancel').style.display = 'none';
+    }
+
+    function deleteProj(id) {
+      if (!confirm('Delete this project?')) return;
+      projects = projects.filter(p => p.id !== id);
+      render();
+      showToast('🗑️ Deleted');
+    }
+
+    function clearForm() {
+      ['f-name','f-url','f-desc','f-tags'].forEach(id => document.getElementById(id).value = '');
+    }
+
+    document.getElementById('btn-copy').addEventListener('click', () => {
+      navigator.clipboard.writeText(JSON.stringify(projects, null, 2))
+        .then(() => showToast('📋 Copied to clipboard!'))
+        .catch(() => showToast('⚠️ Copy failed — please select + copy manually'));
+    });
+
+    document.getElementById('btn-download').addEventListener('click', () => {
+      const blob = new Blob([JSON.stringify(projects, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'projects.json';
+      a.click();
+      URL.revokeObjectURL(a.href);
+      showToast('⬇️ Downloaded!');
+    });
+
+    function esc(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    load();
+  </script>
+</body>
+</html>

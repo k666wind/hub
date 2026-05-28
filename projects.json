@@ -1,0 +1,10 @@
+[
+  {
+    "id": "1",
+    "name": "Example App",
+    "description": "An example PWA project to get you started.",
+    "url": "https://yourusername.github.io/example-app",
+    "tags": ["demo", "starter"],
+    "color": "#7c3aed"
+  }
+]

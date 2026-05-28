@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PWA Hub</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0f0a1e" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f0a1e;
+      --orb1: #3d1a78;
+      --orb2: #0d3d6e;
+      --orb3: #1a0d3d;
+      --glass: rgba(255,255,255,0.06);
+      --glass-border: rgba(255,255,255,0.12);
+      --glass-hover: rgba(255,255,255,0.10);
+      --text: #f0eeff;
+      --text-dim: rgba(240,238,255,0.55);
+      --text-dimmer: rgba(240,238,255,0.3);
+      --accent: #a78bfa;
+      --accent2: #60a5fa;
+      --tag-bg: rgba(167,139,250,0.15);
+      --tag-text: #c4b5fd;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* animated background orbs */
+    .bg-orbs {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      overflow: hidden;
+    }
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.55;
+      animation: drift 18s ease-in-out infinite alternate;
+    }
+    .orb1 { width: 600px; height: 600px; background: var(--orb1); top: -200px; left: -150px; animation-duration: 22s; }
+    .orb2 { width: 500px; height: 500px; background: var(--orb2); bottom: -150px; right: -100px; animation-duration: 17s; animation-delay: -5s; }
+    .orb3 { width: 350px; height: 350px; background: var(--orb3); top: 40%; left: 40%; animation-duration: 25s; animation-delay: -10s; }
+
+    @keyframes drift {
+      0%   { transform: translate(0, 0) scale(1); }
+      33%  { transform: translate(40px, -30px) scale(1.05); }
+      66%  { transform: translate(-20px, 40px) scale(0.97); }
+      100% { transform: translate(30px, 20px) scale(1.03); }
+    }
+
+    /* noise grain overlay */
+    .bg-orbs::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.35;
+    }
+
+    /* layout */
+    .page { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; }
+
+    header {
+      padding: 2.5rem 2.5rem 0;
+      display: flex; justify-content: space-between; align-items: flex-start;
+    }
+
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.6rem; font-weight: 800;
+      background: linear-gradient(135deg, #e0d7ff, #a78bfa 50%, #60a5fa);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.02em;
+    }
+
+    .admin-link {
+      display: flex; align-items: center; gap: 6px;
+      color: var(--text-dim); font-size: 0.85rem;
+      text-decoration: none;
+      padding: 6px 14px;
+      border: 1px solid var(--glass-border);
+      border-radius: 999px;
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      transition: all 0.2s;
+    }
+    .admin-link:hover { background: var(--glass-hover); color: var(--text); border-color: rgba(255,255,255,0.22); }
+    .admin-link svg { width: 14px; height: 14px; }
+
+    main { padding: 3rem 2.5rem 4rem; flex: 1; }
+
+    .hero {
+      margin-bottom: 2.5rem;
+    }
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.6rem;
+    }
+    .hero p { color: var(--text-dim); font-size: 1rem; font-weight: 300; }
+
+    /* filter bar */
+    .filter-bar {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+    .filter-btn {
+      padding: 6px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--glass-border);
+      background: var(--glass);
+      color: var(--text-dim);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: all 0.18s;
+      backdrop-filter: blur(8px);
+    }
+    .filter-btn:hover { background: var(--glass-hover); color: var(--text); }
+    .filter-btn.active {
+      background: rgba(167,139,250,0.2);
+      border-color: rgba(167,139,250,0.45);
+      color: var(--accent);
+    }
+
+    /* search */
+    .search-wrap {
+      position: relative;
+      margin-bottom: 2rem;
+      max-width: 420px;
+    }
+    .search-wrap svg {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      color: var(--text-dimmer); width: 16px; height: 16px; pointer-events: none;
+    }
+    .search-input {
+      width: 100%;
+      padding: 10px 14px 10px 40px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      backdrop-filter: blur(12px);
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .search-input::placeholder { color: var(--text-dimmer); }
+    .search-input:focus { border-color: rgba(167,139,250,0.5); background: var(--glass-hover); }
+
+    /* grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    /* card */
+    .card {
+      position: relative;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 1.5rem;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition: transform 0.22s cubic-bezier(.34,1.56,.64,1), border-color 0.2s, background 0.2s, box-shadow 0.2s;
+      overflow: hidden;
+      display: flex; flex-direction: column; gap: 1rem;
+    }
+    .card::before {
+      content: '';
+      position: absolute; inset: 0;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.07) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .card:hover {
+      transform: translateY(-4px) scale(1.01);
+      border-color: rgba(255,255,255,0.22);
+      background: var(--glass-hover);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(167,139,250,0.15);
+    }
+
+    .card-accent {
+      width: 36px; height: 36px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .card-body { flex: 1; }
+    .card-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.05rem; font-weight: 700;
+      margin-bottom: 0.35rem;
+      letter-spacing: -0.01em;
+    }
+    .card-desc {
+      font-size: 0.83rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+
+    .card-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 8px;
+    }
+    .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .tag {
+      font-size: 0.72rem;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      border: 1px solid rgba(167,139,250,0.2);
+    }
+    .card-arrow {
+      color: var(--text-dimmer);
+      width: 18px; height: 18px; flex-shrink: 0;
+      transition: color 0.2s, transform 0.2s;
+    }
+    .card:hover .card-arrow { color: var(--accent); transform: translate(2px, -2px); }
+
+    /* empty state */
+    .empty {
+      text-align: center; padding: 4rem 2rem;
+      color: var(--text-dimmer); font-size: 0.9rem;
+    }
+    .empty span { font-size: 2rem; display: block; margin-bottom: 0.75rem; opacity: 0.4; }
+
+    /* count */
+    .count { font-size: 0.8rem; color: var(--text-dimmer); margin-bottom: 1rem; }
+
+    /* toast */
+    .toast {
+      position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(80px);
+      background: rgba(167,139,250,0.15); backdrop-filter: blur(12px);
+      border: 1px solid rgba(167,139,250,0.3);
+      color: var(--text); font-size: 0.85rem;
+      padding: 10px 20px; border-radius: 999px;
+      transition: transform 0.3s cubic-bezier(.34,1.56,.64,1), opacity 0.3s;
+      opacity: 0; pointer-events: none; z-index: 100;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+    @media (max-width: 600px) {
+      header { padding: 1.5rem 1.25rem 0; }
+      main { padding: 2rem 1.25rem 3rem; }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-orbs">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+  </div>
+
+  <div class="page">
+    <header>
+      <div class="logo">⬡ Hub</div>
+      <a href="admin.html" class="admin-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+        Admin
+      </a>
+    </header>
+
+    <main>
+      <div class="hero">
+        <h1>Your PWA<br/>Launchpad</h1>
+        <p id="subtitle">Loading projects…</p>
+      </div>
+
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input class="search-input" type="text" id="search" placeholder="Search projects…" />
+      </div>
+
+      <div class="filter-bar" id="filter-bar">
+        <button class="filter-btn active" data-tag="all">All</button>
+      </div>
+
+      <div class="count" id="count"></div>
+      <div class="grid" id="grid"></div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    let allProjects = [];
+    let activeTag = 'all';
+    let searchQ = '';
+
+    const CARD_COLORS = [
+      { bg: 'rgba(124,58,237,0.25)', text: '#c4b5fd' },
+      { bg: 'rgba(37,99,235,0.25)',  text: '#93c5fd' },
+      { bg: 'rgba(5,150,105,0.25)',  text: '#6ee7b7' },
+      { bg: 'rgba(217,70,239,0.25)', text: '#f0abfc' },
+      { bg: 'rgba(234,88,12,0.25)',  text: '#fdba74' },
+      { bg: 'rgba(220,38,38,0.25)',  text: '#fca5a5' },
+      { bg: 'rgba(2,132,199,0.25)',  text: '#7dd3fc' },
+    ];
+
+    const EMOJIS = ['🚀','⚡','🎯','🛠️','✨','🌊','🔮','🎨','📱','🧩'];
+
+    function colorFor(id) {
+      const i = parseInt(id) % CARD_COLORS.length;
+      return CARD_COLORS[i] || CARD_COLORS[0];
+    }
+    function emojiFor(id) {
+      return EMOJIS[parseInt(id) % EMOJIS.length];
+    }
+
+    async function loadProjects() {
+      try {
+        const res = await fetch('projects.json?t=' + Date.now());
+        allProjects = await res.json();
+        init();
+      } catch {
+        showToast('⚠️ Could not load projects.json');
+        allProjects = [];
+        init();
+      }
+    }
+
+    function init() {
+      const subtitle = document.getElementById('subtitle');
+      subtitle.textContent = allProjects.length === 0
+        ? 'No projects yet — add some in Admin!'
+        : `${allProjects.length} project${allProjects.length > 1 ? 's' : ''} ready to launch`;
+
+      buildFilters();
+      render();
+
+      document.getElementById('search').addEventListener('input', e => {
+        searchQ = e.target.value.trim().toLowerCase();
+        render();
+      });
+    }
+
+    function buildFilters() {
+      const bar = document.getElementById('filter-bar');
+      bar.innerHTML = '<button class="filter-btn active" data-tag="all">All</button>';
+      const tags = [...new Set(allProjects.flatMap(p => p.tags || []))].sort();
+      tags.forEach(tag => {
+        const btn = document.createElement('button');
+        btn.className = 'filter-btn';
+        btn.dataset.tag = tag;
+        btn.textContent = tag;
+        bar.appendChild(btn);
+      });
+      bar.addEventListener('click', e => {
+        const btn = e.target.closest('.filter-btn');
+        if (!btn) return;
+        activeTag = btn.dataset.tag;
+        bar.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b === btn));
+        render();
+      });
+    }
+
+    function render() {
+      const grid = document.getElementById('grid');
+      const count = document.getElementById('count');
+      let filtered = allProjects.filter(p => {
+        const matchTag = activeTag === 'all' || (p.tags || []).includes(activeTag);
+        const matchQ = !searchQ || p.name.toLowerCase().includes(searchQ) || (p.description || '').toLowerCase().includes(searchQ);
+        return matchTag && matchQ;
+      });
+
+      count.textContent = filtered.length ? `Showing ${filtered.length} of ${allProjects.length}` : '';
+
+      if (!filtered.length) {
+        grid.innerHTML = '<div class="empty"><span>🔍</span>No projects match your filter.</div>';
+        return;
+      }
+
+      grid.innerHTML = '';
+      filtered.forEach(p => {
+        const c = colorFor(p.id);
+        const emoji = emojiFor(p.id);
+        const tagsHtml = (p.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
+        const a = document.createElement('a');
+        a.className = 'card';
+        a.href = p.url || '#';
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.innerHTML = `
+          <div class="card-accent" style="background:${c.bg}; color:${c.text}">${emoji}</div>
+          <div class="card-body">
+            <div class="card-name">${escHtml(p.name)}</div>
+            <div class="card-desc">${escHtml(p.description || '')}</div>
+          </div>
+          <div class="card-footer">
+            <div class="tags">${tagsHtml}</div>
+            <svg class="card-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg>
+          </div>`;
+        grid.appendChild(a);
+      });
+    }
+
+    function escHtml(s) {
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+
+    loadProjects();
+  </script>
+</body>
+</html>
