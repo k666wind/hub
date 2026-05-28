@@ -2,7 +2,7 @@
   "name": "PWA Hub",
   "short_name": "Hub",
   "description": "Your personal PWA launchpad",
-  "start_url": "/",
+  "start_url": "/hub",
   "display": "standalone",
   "background_color": "#0f0a1e",
   "theme_color": "#0f0a1e",
