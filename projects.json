@@ -18,5 +18,14 @@
       "LogReader"
     ],
     "color": "#7c3aed"
+  },
+  {
+    "id": "3",
+    "name": "Word Search",
+    "url": "https://k666wind.github.io/wordsearch/",
+    "description": "",
+    "tags": [
+      "Game"
+    ]
   }
 ]
