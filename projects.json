@@ -54,5 +54,12 @@
     "tags": [
       "Game"
     ]
+  },
+  {
+    "id": "7",
+    "name": "pictionary-v2",
+    "url": "https://k666wind.github.io/pictionary/",
+    "description": "",
+    "tags": []
   }
 ]
