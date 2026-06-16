@@ -60,6 +60,8 @@
     "name": "pictionary-v2",
     "url": "https://k666wind.github.io/pictionary/",
     "description": "",
-    "tags": []
+    "tags": [
+      "Game"
+    ]
   }
 ]
