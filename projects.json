@@ -63,5 +63,14 @@
     "tags": [
       "Game"
     ]
+  },
+  {
+    "id": "8",
+    "name": "MyNote",
+    "url": "https://k666wind.github.io/personal-vault/",
+    "description": "",
+    "tags": [
+      "Tools"
+    ]
   }
 ]
