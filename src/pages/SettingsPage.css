@@ -1,0 +1,78 @@
+.mj-settings-section {
+  margin: 16px 16px 0;
+}
+
+.mj-segment {
+  display: flex;
+  padding: 4px;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.mj-segment-btn {
+  flex: 1;
+  appearance: none;
+  border: none;
+  background: transparent;
+  padding: 10px 0;
+  border-radius: 8px;
+  font-family: var(--mj-font-body);
+  font-size: 14px;
+  color: var(--mj-ink-soft);
+}
+
+.mj-segment-btn.active {
+  background: var(--mj-jade);
+  color: #fff;
+  font-weight: 600;
+}
+
+.mj-settings-list {
+  margin-top: 8px;
+  overflow: hidden;
+  padding: 0;
+}
+
+.mj-settings-row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border: none;
+  background: transparent;
+  border-bottom: 1px solid var(--mj-border);
+  font-family: var(--mj-font-body);
+  font-size: 15px;
+  color: var(--mj-ink);
+}
+
+.mj-settings-row:last-child {
+  border-bottom: none;
+}
+
+.mj-settings-row-static {
+  color: var(--mj-ink);
+}
+
+.mj-muted {
+  color: var(--mj-ink-soft);
+  font-size: 13px;
+}
+
+.mj-chevron {
+  color: var(--mj-ink-soft);
+}
+
+.mj-status {
+  margin: 8px 4px 0;
+  font-size: 13px;
+  color: var(--mj-jade);
+}
+
+.mj-footnote {
+  margin: 24px 16px 32px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--mj-ink-soft);
+}

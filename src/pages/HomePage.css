@@ -1,0 +1,190 @@
+.mj-content {
+  --background: var(--mj-bg);
+}
+
+.mj-loading {
+  text-align: center;
+  color: var(--mj-ink-soft);
+  margin-top: 60px;
+}
+
+.mj-hero {
+  margin: 16px;
+  padding: 28px 20px;
+  background: linear-gradient(160deg, var(--mj-surface) 0%, var(--mj-surface-raised) 100%);
+}
+
+.mj-hero h1 {
+  margin: 8px 0 4px;
+  font-size: 26px;
+  font-family: var(--mj-font-display);
+  color: var(--mj-jade-deep);
+}
+
+.mj-hero-sub {
+  margin: 0 0 18px;
+  color: var(--mj-ink-soft);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.mj-cta {
+  display: block;
+  width: calc(100% - 32px);
+  margin: 4px 16px 24px;
+  appearance: none;
+  border: none;
+  border-radius: var(--mj-radius-pill);
+  padding: 14px 22px;
+  background: var(--mj-jade);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: var(--mj-font-body);
+  text-align: center;
+}
+
+.mj-cta:disabled {
+  opacity: 0.45;
+}
+
+/* --- Game setup --- */
+
+.mj-setup-section {
+  margin: 0 16px 16px;
+  padding: 16px;
+}
+
+.mj-setup-section h3 {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: var(--mj-ink-soft);
+  font-weight: 600;
+}
+
+.mj-setup-hint {
+  margin: 8px 2px 0;
+  font-size: 12px;
+  color: var(--mj-ink-soft);
+}
+
+.mj-add-player {
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.mj-text-input {
+  flex: 1;
+  border: 1px solid var(--mj-border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-family: var(--mj-font-body);
+  background: var(--mj-surface-raised);
+  color: var(--mj-ink);
+}
+
+.mj-add-btn {
+  appearance: none;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  background: var(--mj-jade);
+  color: #fff;
+  font-family: var(--mj-font-body);
+  font-size: 14px;
+}
+
+/* --- Active scoreboard --- */
+
+.mj-round-banner {
+  margin: 16px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mj-round-rules {
+  font-size: 12px;
+  color: var(--mj-ink-soft);
+}
+
+.mj-players {
+  margin: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mj-player-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+}
+
+.mj-player-dealer {
+  border-color: var(--mj-gold);
+}
+
+.mj-player-name {
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mj-dealer-badge {
+  font-size: 11px;
+  background: var(--mj-gold);
+  color: #fff;
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+
+.mj-player-wind {
+  font-family: var(--mj-font-display);
+  color: var(--mj-jade);
+  font-size: 15px;
+}
+
+.mj-player-score {
+  font-family: var(--mj-font-mono);
+  font-size: 18px;
+  font-weight: 700;
+  min-width: 48px;
+  text-align: right;
+}
+
+.mj-score-positive {
+  color: var(--mj-jade);
+}
+.mj-score-negative {
+  color: var(--mj-vermillion);
+}
+
+.mj-scoreboard-actions {
+  margin: 20px 16px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mj-secondary-btn {
+  appearance: none;
+  border: 1px solid var(--mj-border);
+  background: var(--mj-surface);
+  color: var(--mj-ink);
+  border-radius: var(--mj-radius-pill);
+  padding: 12px;
+  font-size: 14px;
+  font-family: var(--mj-font-body);
+}
+
+.mj-secondary-btn.mj-danger {
+  color: var(--mj-vermillion);
+  border-color: var(--mj-vermillion);
+}

@@ -1,0 +1,50 @@
+{
+  "profiles": [
+    {
+      "id": "hk-classic",
+      "name": "香港正規",
+      "isBuiltIn": true,
+      "rules": {
+        "minFan": 3,
+        "maxFan": 13,
+        "flowerTilesEnabled": true,
+        "chickenHandEnabled": false,
+        "dealerBonus": 2,
+        "selfDrawBonus": 1,
+        "limitHands": true,
+        "sevenPairs": true,
+        "thirteenOrphans": true,
+        "allPongs": true,
+        "mixedOneSuit": true,
+        "pureOneSuit": true,
+        "smallDragons": true,
+        "bigDragons": true,
+        "smallWinds": true,
+        "bigWinds": true
+      }
+    },
+    {
+      "id": "hk-casual",
+      "name": "香港啤牌",
+      "isBuiltIn": true,
+      "rules": {
+        "minFan": 1,
+        "maxFan": 13,
+        "flowerTilesEnabled": true,
+        "chickenHandEnabled": true,
+        "dealerBonus": 1,
+        "selfDrawBonus": 1,
+        "limitHands": true,
+        "sevenPairs": true,
+        "thirteenOrphans": true,
+        "allPongs": true,
+        "mixedOneSuit": true,
+        "pureOneSuit": true,
+        "smallDragons": true,
+        "bigDragons": true,
+        "smallWinds": true,
+        "bigWinds": true
+      }
+    }
+  ]
+}

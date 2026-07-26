@@ -1,0 +1,69 @@
+.mj-recorder {
+  padding: 12px 16px 32px;
+}
+
+.mj-recorder section {
+  margin-bottom: 18px;
+}
+
+.mj-recorder h3 {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: var(--mj-ink-soft);
+  font-weight: 600;
+}
+
+.mj-pill-row {
+  margin-bottom: 2px;
+}
+
+.mj-fan-preview {
+  padding: 14px 16px;
+}
+
+.mj-fan-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--mj-border);
+  font-size: 13px;
+}
+.mj-fan-row:last-of-type {
+  border-bottom: none;
+}
+
+.mj-fan-awarded {
+  color: var(--mj-jade-deep);
+  font-weight: 600;
+}
+.mj-fan-not-awarded {
+  color: var(--mj-ink-soft);
+  opacity: 0.75;
+}
+
+.mj-fan-reason {
+  text-align: right;
+  flex-shrink: 1;
+  color: var(--mj-ink-soft);
+}
+
+.mj-fan-total {
+  margin-top: 10px;
+  font-family: var(--mj-font-display);
+  font-size: 18px;
+  color: var(--mj-vermillion);
+  font-weight: 700;
+}
+
+.mj-fan-warning {
+  color: var(--mj-vermillion);
+  font-size: 13px;
+  margin: 8px 4px;
+}
+
+.mj-confirm-btn {
+  --background: var(--mj-jade);
+  --border-radius: var(--mj-radius-pill);
+  margin-top: 20px;
+}

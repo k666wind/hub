@@ -1,0 +1,71 @@
+.mj-content {
+  --background: var(--mj-bg);
+}
+
+.mj-loading {
+  text-align: center;
+  color: var(--mj-ink-soft);
+  margin-top: 60px;
+}
+
+.mj-history-list {
+  padding: 12px 16px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mj-history-card {
+  padding: 14px 16px;
+}
+
+.mj-history-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.mj-history-winner {
+  font-family: var(--mj-font-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--mj-jade-deep);
+}
+
+.mj-history-time {
+  font-size: 12px;
+  color: var(--mj-ink-soft);
+}
+
+.mj-history-sub {
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--mj-ink-soft);
+}
+
+.mj-history-tiles {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.mj-history-chip {
+  font-size: 12px;
+  background: var(--mj-surface-raised);
+  border: 1px solid var(--mj-border);
+  border-radius: 6px;
+  padding: 3px 6px;
+}
+
+.mj-history-meld {
+  background: var(--mj-jade);
+  color: #fff;
+  border-color: var(--mj-jade);
+}
+
+.mj-history-fan {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--mj-vermillion);
+}

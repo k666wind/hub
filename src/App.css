@@ -1,0 +1,15 @@
+.mj-tabbar {
+  --background: var(--mj-surface-raised);
+  border-top: 1px solid var(--mj-border);
+}
+
+.mj-tabbar ion-tab-button {
+  --color: var(--mj-ink-soft);
+  --color-selected: var(--mj-jade);
+  font-family: var(--mj-font-body);
+}
+
+.mj-tabbar ion-tab-button ion-label {
+  font-size: 11px;
+  letter-spacing: 0.02em;
+}

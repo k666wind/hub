@@ -1,0 +1,51 @@
+.mj-content {
+  --background: var(--mj-bg);
+}
+
+.mj-loading {
+  text-align: center;
+  color: var(--mj-ink-soft);
+  margin-top: 60px;
+}
+
+.mj-stats-list {
+  padding: 12px 16px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mj-stats-card {
+  padding: 16px;
+}
+
+.mj-stats-card h3 {
+  margin: 0 0 12px;
+  font-family: var(--mj-font-display);
+  color: var(--mj-jade-deep);
+  font-size: 17px;
+}
+
+.mj-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.mj-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mj-stat-value {
+  font-family: var(--mj-font-mono);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--mj-ink);
+}
+
+.mj-stat-label {
+  font-size: 11px;
+  color: var(--mj-ink-soft);
+}

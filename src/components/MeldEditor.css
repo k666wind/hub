@@ -1,0 +1,16 @@
+.mj-meld-editor {
+  margin-top: 4px;
+}
+
+.mj-meld-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.mj-meld-hint {
+  font-size: 12px;
+  color: var(--mj-ink-soft);
+  margin: 8px 2px 6px;
+}
