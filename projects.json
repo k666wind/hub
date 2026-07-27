@@ -81,5 +81,14 @@
     "tags": [
       "Game"
     ]
+  },
+  {
+    "id": "10",
+    "name": "Mahjong",
+    "url": "https://k666wind.github.io/hk-mahjong-ai-assistant/",
+    "description": "",
+    "tags": [
+      "Tools"
+    ]
   }
 ]
